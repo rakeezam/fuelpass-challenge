@@ -1,0 +1,179 @@
+{
+  "name": "public",
+  "namespaces": [
+    "public"
+  ],
+  "tables": [
+    {
+      "name": "orders",
+      "schema": "public",
+      "columns": {
+        "airport_icao_code": {
+          "name": "airport_icao_code",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 255,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "string"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "delivery_window_end": {
+          "name": "delivery_window_end",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "delivery_window_start": {
+          "name": "delivery_window_start",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "datetime"
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "uuid"
+        },
+        "requested_fuel_volume": {
+          "name": "requested_fuel_volume",
+          "type": "double precision",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "double"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "'PENDING'",
+          "comment": null,
+          "collation": null,
+          "enumItems": [
+            "PENDING",
+            "CONFIRMED",
+            "COMPLETED"
+          ],
+          "mappedType": "enum"
+        },
+        "tail_number": {
+          "name": "tail_number",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 255,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "collation": null,
+          "enumItems": [],
+          "mappedType": "string"
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "keyName": "orders_pkey",
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [
+        {
+          "name": "orders_status_check",
+          "expression": "\"status\" in ('PENDING', 'CONFIRMED', 'COMPLETED')",
+          "definition": "check (\"status\" in ('PENDING', 'CONFIRMED', 'COMPLETED'))",
+          "columnName": "status"
+        }
+      ],
+      "triggers": [],
+      "foreignKeys": {},
+      "comment": null
+    }
+  ],
+  "views": [],
+  "nativeEnums": {}
+}
