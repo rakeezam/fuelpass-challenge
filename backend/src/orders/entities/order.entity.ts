@@ -4,6 +4,7 @@ import {
   PrimaryKey,
   Property,
 } from '@mikro-orm/decorators/legacy';
+import { OptionalProps } from '@mikro-orm/postgresql';
 import { v7 as uuidv7 } from 'uuid';
 
 export enum OrderStatus {
@@ -15,6 +16,9 @@ export enum OrderStatus {
 // 'order' is a reserved SQL keyword (as in ORDER BY), so the table is named 'orders'.
 @Entity({ tableName: 'orders' })
 export class Order {
+  // Populated server-side (default value / onCreate hook).
+  [OptionalProps]?: 'status' | 'createdAt';
+
   @PrimaryKey({ type: 'uuid' })
   id: string = uuidv7();
 
