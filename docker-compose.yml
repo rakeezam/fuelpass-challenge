@@ -8,4 +8,9 @@ services:
       POSTGRES_DB: fuelpass
     ports:
     # TCP port for postgres
-      - "5432:5432" 
+      - "5432:5432"
+    volumes:
+      - fuelpass-db-data:/var/lib/postgresql/data
+
+volumes:
+  fuelpass-db-data:
