@@ -13,10 +13,9 @@ export enum OrderStatus {
   COMPLETED = 'COMPLETED',
 }
 
-// 'order' is a reserved SQL keyword (as in ORDER BY), so the table is named 'orders'.
 @Entity({ tableName: 'orders' })
 export class Order {
-  // Populated server-side (default value / onCreate hook).
+  // Populated server-side
   [OptionalProps]?: 'status' | 'createdAt';
 
   @PrimaryKey({ type: 'uuid' })
