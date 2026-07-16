@@ -1,4 +1,5 @@
 import { OrderForm } from "./components/OrderForm";
+import { OrderTable } from "./components/OrderTable";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       </header>
 
       <main>
+        <OrderTable />
         <OrderForm />
       </main>
     </>
