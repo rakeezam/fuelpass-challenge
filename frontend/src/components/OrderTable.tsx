@@ -13,7 +13,7 @@ const NEXT_STATUS_ACTION: Record<
   { next: OrderStatus; label: string } | null
 > = {
   PENDING: { next: "CONFIRMED", label: "Confirm" },
-  CONFIRMED: { next: "COMPLETED", label: "Mark Completed" },
+  CONFIRMED: { next: "COMPLETED", label: "Complete" },
   COMPLETED: null,
 };
 
@@ -87,12 +87,6 @@ export const OrderTable = ({ airportCode }: OrderTableProps) => {
             >
               Created At
             </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-            >
-              Actions
-            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
@@ -116,24 +110,24 @@ export const OrderTable = ({ airportCode }: OrderTableProps) => {
                   {formatDateTime(order.deliveryWindowEnd)}
                 </td>
                 <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
-                  <StatusBadge status={order.status} />
+                  <div className="flex items-center gap-2">
+                    <StatusBadge status={order.status} />
+                    {nextAction && (
+                      <button
+                        type="button"
+                        disabled={isUpdating}
+                        onClick={() =>
+                          handleUpdateStatus(order.id, nextAction.next)
+                        }
+                        className="rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                      >
+                        {isUpdating ? "Updating..." : nextAction.label}
+                      </button>
+                    )}
+                  </div>
                 </td>
                 <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
                   {formatDateTime(order.createdAt)}
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
-                  {nextAction && (
-                    <button
-                      type="button"
-                      disabled={isUpdating}
-                      onClick={() =>
-                        handleUpdateStatus(order.id, nextAction.next)
-                      }
-                      className="rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-                    >
-                      {isUpdating ? "Updating..." : nextAction.label}
-                    </button>
-                  )}
                 </td>
               </tr>
             );
