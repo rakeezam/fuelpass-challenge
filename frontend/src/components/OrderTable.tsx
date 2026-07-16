@@ -85,6 +85,12 @@ export const OrderTable = ({ airportCode }: OrderTableProps) => {
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
             >
+              Update Status
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+            >
               Created At
             </th>
           </tr>
@@ -110,21 +116,21 @@ export const OrderTable = ({ airportCode }: OrderTableProps) => {
                   {formatDateTime(order.deliveryWindowEnd)}
                 </td>
                 <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
-                  <div className="flex items-center gap-2">
-                    <StatusBadge status={order.status} />
-                    {nextAction && (
-                      <button
-                        type="button"
-                        disabled={isUpdating}
-                        onClick={() =>
-                          handleUpdateStatus(order.id, nextAction.next)
-                        }
-                        className="rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-                      >
-                        {isUpdating ? "Updating..." : nextAction.label}
-                      </button>
-                    )}
-                  </div>
+                  <StatusBadge status={order.status} />
+                </td>
+                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
+                  {nextAction && (
+                    <button
+                      type="button"
+                      disabled={isUpdating}
+                      onClick={() =>
+                        handleUpdateStatus(order.id, nextAction.next)
+                      }
+                      className="rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                    >
+                      {isUpdating ? "Updating..." : nextAction.label}
+                    </button>
+                  )}
                 </td>
                 <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
                   {formatDateTime(order.createdAt)}
