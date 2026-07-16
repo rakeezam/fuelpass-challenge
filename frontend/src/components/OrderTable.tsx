@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useOrders } from "../hooks/useOrders";
 import { useUpdateStatus } from "../hooks/useUpdateStatus";
 import { StatusBadge } from "./StatusBadge";
@@ -7,6 +7,21 @@ import type { OrderStatus } from "../types/order";
 interface OrderTableProps {
   airportCode?: string;
 }
+
+const Th = ({ children }: { children: ReactNode }) => (
+  <th
+    scope="col"
+    className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+  >
+    {children}
+  </th>
+);
+
+const Td = ({ children }: { children: ReactNode }) => (
+  <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
+    {children}
+  </td>
+);
 
 const NEXT_STATUS_ACTION: Record<
   OrderStatus,
@@ -51,48 +66,13 @@ export const OrderTable = ({ airportCode }: OrderTableProps) => {
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-            >
-              Tail Number
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-            >
-              Airport
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-            >
-              Requested Volume
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-            >
-              Delivery Window
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-            >
-              Status
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-            >
-              Update Status
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-            >
-              Created At
-            </th>
+            <Th>Tail Number</Th>
+            <Th>Airport</Th>
+            <Th>Requested Volume</Th>
+            <Th>Delivery Window</Th>
+            <Th>Status</Th>
+            <Th>Update Status</Th>
+            <Th>Created At</Th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
@@ -102,23 +82,17 @@ export const OrderTable = ({ airportCode }: OrderTableProps) => {
 
             return (
               <tr key={order.id}>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
-                  {order.tailNumber}
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
-                  {order.airportIcaoCode}
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
-                  {order.requestedFuelVolume} L
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
+                <Td>{order.tailNumber}</Td>
+                <Td>{order.airportIcaoCode}</Td>
+                <Td>{order.requestedFuelVolume} L</Td>
+                <Td>
                   {formatDateTime(order.deliveryWindowStart)} –{" "}
                   {formatDateTime(order.deliveryWindowEnd)}
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
+                </Td>
+                <Td>
                   <StatusBadge status={order.status} />
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
+                </Td>
+                <Td>
                   {nextAction && (
                     <button
                       type="button"
@@ -131,10 +105,8 @@ export const OrderTable = ({ airportCode }: OrderTableProps) => {
                       {isUpdating ? "Updating..." : nextAction.label}
                     </button>
                   )}
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
-                  {formatDateTime(order.createdAt)}
-                </td>
+                </Td>
+                <Td>{formatDateTime(order.createdAt)}</Td>
               </tr>
             );
           })}

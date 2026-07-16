@@ -34,7 +34,7 @@ const orderFormSchema = z.object({
     }),
 });
 
-export type OrderFormData = z.infer<typeof orderFormSchema>;
+type OrderFormData = z.infer<typeof orderFormSchema>;
 
 export const OrderForm = () => {
   const { submitOrder, isSubmitting, error } = useCreateOrder();

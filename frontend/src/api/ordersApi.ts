@@ -3,7 +3,7 @@ import type { CreateOrderPayload, Order, OrderStatus } from "../types/order";
 
 const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 
-export const client = axios.create({
+const client = axios.create({
   baseURL: `${baseUrl}/orders`,
 });
 

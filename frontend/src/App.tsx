@@ -10,7 +10,7 @@ const TAB_LABELS: Record<Tab, string> = {
   manage: "Manage Orders",
 };
 
-function App() {
+export const App = () => {
   const [activeTab, setActiveTab] = useState<Tab>("submit");
   const [airportCode, setAirportCode] = useState("");
 
@@ -51,6 +51,4 @@ function App() {
       </main>
     </div>
   );
-}
-
-export default App;
+};
