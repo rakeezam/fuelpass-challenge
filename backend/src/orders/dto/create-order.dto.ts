@@ -5,8 +5,31 @@ import {
   IsPositive,
   IsString,
   Matches,
+  registerDecorator,
+  ValidationOptions,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+
+function IsFutureDate(validationOptions?: ValidationOptions) {
+  return function (object: object, propertyName: string) {
+    registerDecorator({
+      name: 'isFutureDate',
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: unknown): boolean {
+          if (typeof value !== 'string') return false;
+          const date = new Date(value);
+          return !isNaN(date.getTime()) && date.getTime() > Date.now();
+        },
+        defaultMessage(): string {
+          return `${propertyName} must be a date in the future`;
+        },
+      },
+    });
+  };
+}
 
 export class CreateOrderDto {
   @IsString()
@@ -24,8 +47,10 @@ export class CreateOrderDto {
   requestedFuelVolume!: number;
 
   @IsISO8601()
+  @IsFutureDate({ message: 'deliveryWindowStart must be in the future' })
   deliveryWindowStart!: string;
 
   @IsISO8601()
+  @IsFutureDate({ message: 'deliveryWindowEnd must be in the future' })
   deliveryWindowEnd!: string;
 }
