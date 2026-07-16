@@ -4,9 +4,12 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateOrder } from "../hooks/useCreateOrder";
 
-const isFutureDate = (value: string) => {
+// Prevents "now" getting rejected
+const START_TIME_GRACE_PERIOD_MS = 5 * 60 * 1000;
+
+const createIsFutureDate = (graceMs = 0) => (value: string) => {
   const date = new Date(value);
-  return !isNaN(date.getTime()) && date.getTime() > Date.now();
+  return !isNaN(date.getTime()) && date.getTime() > Date.now() - graceMs;
 };
 
 const orderFormSchema = z.object({
@@ -20,13 +23,13 @@ const orderFormSchema = z.object({
   deliveryWindowStart: z
     .string()
     .min(1, { error: "Delivery Window Start is required" })
-    .refine(isFutureDate, {
+    .refine(createIsFutureDate(START_TIME_GRACE_PERIOD_MS), {
       error: "Delivery Window Start must be in the future",
     }),
   deliveryWindowEnd: z
     .string()
     .min(1, { error: "Delivery Window End is required" })
-    .refine(isFutureDate, {
+    .refine(createIsFutureDate(), {
       error: "Delivery Window End must be in the future",
     }),
 });
