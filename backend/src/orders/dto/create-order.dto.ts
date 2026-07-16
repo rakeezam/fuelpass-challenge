@@ -13,10 +13,10 @@ import { Transform } from 'class-transformer';
 // Prevents "now" getting rejected
 const START_TIME_GRACE_PERIOD_MS = 5 * 60 * 1000;
 
-function IsFutureDate(options?: ValidationOptions & { graceMs?: number }) {
+const IsFutureDate = (options?: ValidationOptions & { graceMs?: number }) => {
   const { graceMs = 0, ...validationOptions } = options ?? {};
 
-  return function (object: object, propertyName: string) {
+  return (object: object, propertyName: string) => {
     registerDecorator({
       name: 'isFutureDate',
       target: object.constructor,
@@ -36,7 +36,7 @@ function IsFutureDate(options?: ValidationOptions & { graceMs?: number }) {
       },
     });
   };
-}
+};
 
 export class CreateOrderDto {
   @IsString()
