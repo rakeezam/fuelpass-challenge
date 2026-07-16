@@ -8,7 +8,6 @@ import { EntityRepository } from '@mikro-orm/postgresql';
 import { Order, OrderStatus } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 
-// Single source of truth for legal status transitions: PENDING -> CONFIRMED -> COMPLETED, never backwards.
 const ALLOWED_STATUS_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   [OrderStatus.PENDING]: [OrderStatus.CONFIRMED],
   [OrderStatus.CONFIRMED]: [OrderStatus.COMPLETED],
@@ -36,8 +35,14 @@ export class OrdersService {
     return order;
   }
 
-  async findAll(): Promise<Order[]> {
-    return this.ordersRepository.findAll({ orderBy: { createdAt: 'DESC' } });
+  async findAll(airportCode?: string): Promise<Order[]> {
+    if (!airportCode) {
+      return this.ordersRepository.findAll({
+        orderBy: { createdAt: 'DESC' },
+      });
+    }
+
+    return this.findByAirportCode(airportCode);
   }
 
   async updateStatus(id: string, status: OrderStatus): Promise<Order> {
@@ -64,5 +69,18 @@ export class OrdersService {
     await this.ordersRepository.getEntityManager().flush();
 
     return order;
+  }
+
+  private async findByAirportCode(airportCode: string): Promise<Order[]> {
+    const normalisedCode = airportCode.toUpperCase();
+
+    if (!normalisedCode.match(/^[A-Z]{4}$/)) {
+      throw new BadRequestException(`Invalid ICAO code: ${airportCode}`);
+    }
+
+    return this.ordersRepository.find(
+      { airportIcaoCode: normalisedCode },
+      { orderBy: { createdAt: 'DESC' } },
+    );
   }
 }

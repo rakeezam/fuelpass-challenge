@@ -6,6 +6,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -16,14 +17,14 @@ import { UpdateStatusDto } from './dto/update-status.dto';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  @Get()
+  findAll(@Query('airportCode') airportCode?: string): Promise<Order[]> {
+    return this.ordersService.findAll(airportCode);
+  }
+
   @Post()
   create(@Body() dto: CreateOrderDto): Promise<Order> {
     return this.ordersService.create(dto);
-  }
-
-  @Get()
-  findAll(): Promise<Order[]> {
-    return this.ordersService.findAll();
   }
 
   @Patch(':id/status')
