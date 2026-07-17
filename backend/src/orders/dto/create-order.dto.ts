@@ -13,6 +13,12 @@ import { Transform } from 'class-transformer';
 // Prevents "now" getting rejected
 const START_TIME_GRACE_PERIOD_MS = 5 * 60 * 1000;
 
+const isFutureDate = (value: unknown, graceMs: number): boolean => {
+  if (typeof value !== 'string') return false;
+  const date = new Date(value);
+  return !isNaN(date.getTime()) && date.getTime() > Date.now() - graceMs;
+};
+
 const IsFutureDate = (options?: ValidationOptions & { graceMs?: number }) => {
   const { graceMs = 0, ...validationOptions } = options ?? {};
 
@@ -23,16 +29,8 @@ const IsFutureDate = (options?: ValidationOptions & { graceMs?: number }) => {
       propertyName,
       options: validationOptions,
       validator: {
-        validate(value: unknown): boolean {
-          if (typeof value !== 'string') return false;
-          const date = new Date(value);
-          return (
-            !isNaN(date.getTime()) && date.getTime() > Date.now() - graceMs
-          );
-        },
-        defaultMessage(): string {
-          return `${propertyName} must be a date in the future`;
-        },
+        validate: (value: unknown) => isFutureDate(value, graceMs),
+        defaultMessage: () => `${propertyName} must be a date in the future`,
       },
     });
   };
